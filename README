@@ -1,0 +1,18 @@
+Del.icio.us Extended API
+
+
+
+USAGE:
+
+d = Delicious.new
+
+
+List the text of all new popular stories:
+d.popular_new.each{|l| p l.text}
+
+List hot list stories:
+d.hot_list.each{|l| p l.text}
+
+
+
+
