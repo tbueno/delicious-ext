@@ -86,6 +86,8 @@ class Delicious
       query = result.search("div[@class='meta']/a[@class='pop").first['href'].gsub("/", "")	
     elsif @list_type == HOT_LIST
       query = result.search("div[@class='tags']/p/a").inner_text
+    elsif @list_type == RECENT
+      query = result.search("div[@class='meta']/a[@class='user").first['href'].gsub("/", "")	
     end
     query
   end
@@ -100,11 +102,11 @@ end
 d = Delicious.new
 
 p "-- Popular --"
-d.popular.each{|l| p l.posted_by}
+#d.popular.each{|l| p l.posted_by}
 
 p "-- Popular new --"
 #d.popular_new.each{|l| p l.posted_by}
 p "-- Hot List --"
-d.hot_list.each{|l| p l.posted_by}
+#d.hot_list.each{|l| p l.posted_by}
 p "-- Recent --"
-#d.recent.each{|l| p l.posted_by}
+d.recent.each{|l| p l.posted_by}
