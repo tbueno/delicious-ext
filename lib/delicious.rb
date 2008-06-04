@@ -67,7 +67,9 @@ module Delicious
   			url =  result.search("h4/a[@href").first['href']
   			posted_by = get_posted_by(result)	
   			people = get_people(result).to_i
-  			links << Delicious::Link.new( text, url, posted_by, people)
+  			tags = get_tags(result)
+  			links << Delicious::Link.new( text, url, posted_by, people, tags)
+  			
   		end
   		links		
   	end
@@ -96,18 +98,28 @@ module Delicious
       end
       query
     end
+    
+    def get_tags(result)
+      tags = []
+      query = result.search("div[@class='tags']/div/ul/li").each do |tag|
+        tags << tag.search("a").inner_text
+      end
+      
+      tags
+    end
   end
   ####### Collector Class end #############
   
   class Link
 
-  	attr_reader :text, :url, :posted_by, :people
+  	attr_reader :text, :url, :posted_by, :people, :tags
 
-  	def initialize(text, url, posted_by, people)
+  	def initialize(text, url, posted_by, people, tags)
   		@text = text
   		@url = url
   		@posted_by = posted_by
-  		@people = people		
+  		@people = people
+  		@tags = tags		
   	end
 
   	#Comparator method. The links should be ordered by the number of people that saved them.
@@ -138,9 +150,18 @@ module Delicious
       @url = BASE_URL+'/'+name
     end
   end
+  ########### Person Class end ############
+  
+  class Tag
+    attr_reader :name, :url
+    
+    def initialize(name)
+      @name = name
+      @url = POPULAR_URL +'/'+name
+    end
+  end
+  
   
 end
 
-d = Delicious::Collector.new
 
-d.hot_list.each{ |l| puts l.posted_by.name}
