@@ -73,16 +73,16 @@ module Delicious
   	end
 	
   	def get_posted_by(result)
-  	  query = " "
+  	  name = " "
    
       if @list_type == POPULAR
-        query = result.search("div[@class='meta']/a[@class='pop").first['href'].gsub("/", "")	
+        name = result.search("div[@class='meta']/a[@class='pop").first['href'].gsub("/", "")	
       elsif @list_type == HOT_LIST
-        query = result.search("div[@class='tags']/p/a").inner_text
+        name = result.search("div[@class='tags']/p/a").inner_text
       elsif @list_type == RECENT
-        query = result.search("div[@class='meta']/a[@class='user").first['href'].gsub("/", "")	
+        name = result.search("div[@class='meta']/a[@class='user").first['href'].gsub("/", "")	
       end
-      query
+      Delicious::Person.new(name)
     end
   
     def get_people(result)
@@ -129,8 +129,18 @@ module Delicious
   end
   ####### Link Class end #############
   
+  class Person
+    
+    attr_reader :name, :url
+    
+    def initialize(name)
+      @name = name
+      @url = BASE_URL+'/'+name
+    end
+  end
+  
 end
 
 d = Delicious::Collector.new
 
-d.hot_list.each{ |l| p l.text}
+d.hot_list.each{ |l| puts l.posted_by.name}
