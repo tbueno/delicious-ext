@@ -47,7 +47,7 @@ module Delicious
   		get_links POPULAR_NEW_URL, POPULAR_QUERY
   	end
 	
-  	def recent(min=2)
+  	def recent(min=100)
   	  @list_type = RECENT
   		get_links RECENT_URL+'?min='+min.to_s, POPULAR_QUERY
   	end
@@ -101,8 +101,14 @@ module Delicious
     
     def get_tags(result)
       tags = []
-      query = result.search("div[@class='tags']/div/ul/li").each do |tag|
-        tags << tag.search("a").inner_text
+      if @list_type == HOT_LIST
+        query = result.search("div[@class='tags']/div/ul/li").each do |tag|
+          tags << tag.search("a").inner_text
+        end
+      elsif @list_type == RECENT
+        query = result.search("div[@class='meta']/a[@class= 'tag']").each do |tag|
+          tags << tag.inner_text
+        end
       end
       
       tags
