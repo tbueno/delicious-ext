@@ -4,7 +4,7 @@ require 'open-uri'
 
 
 # This Module is an extension to official del.icio.us API.
-# The main purpose her is to provide functions like 
+# The main purpose here is to provide methods like 
 # get popular, hot and recent links. 
 #
 # Author::    Thiago Bueno Silva  (mailto:tbueno@gmail.com)
@@ -56,9 +56,9 @@ module Delicious
       links = []
      		
       doc = Hpricot(open(base_url))  
-      doc.search(query).each do |result|        
-        text = result.search("div[@class='data']/h4/a[@href").first.inner_text       
-        url =  result.search("div[@class='data']/h4/a[@href").first['href']     
+      (doc/query).each do |result|        
+        text = (result/"div[@class='data']/h4/a[@href").first.inner_text       
+        url =  (result/"div[@class='data']/h4/a[@href").first['href']     
       
         posted_by = get_posted_by(result)	
         people = get_people(result).to_i
@@ -73,20 +73,20 @@ module Delicious
       name = " "
    
       if @list_type == POPULAR or @list_type == SEARCH 
-        name = result.search("div[@class='meta']/span/a[@class='user").first['href'].gsub("/", "")	        
+        name = (result/"div[@class='meta']/span/a[@class='user").first['href'].gsub("/", "")	        
       elsif @list_type == RECENT
-        name = result.search("div[@class='meta']/a[@class='user").first['href'].gsub("/", "")	
+        name = (result/"div[@class='meta']/a[@class='user").first['href'].gsub("/", "")	
       end
       Delicious::Person.new(name)
     end
   
     def get_people(result)
-      result.search("div[@class='data']/div/a/span").inner_text
+      (result/"div[@class='data']/div/a/span").inner_text
     end
     
     def get_tags(result)
       tags = []
-      query = result.search("div[@class='tagdisplay']/ul/li/a/span").each do |span|
+      query = (result/"div[@class='tagdisplay']/ul/li/a/span").each do |span|
           tags << span.inner_text
       end           
       tags
@@ -147,13 +147,13 @@ module Delicious
 end
 
 d = Delicious::Collector.new
-links = d.popular
+links = d.hot_list
 links.each do |link|
   
   puts '------------------------------------------'
   puts "Text: #{link.text}"
   puts "URL: #{link.url}"
-  puts "People: #{link.people.to_s}"
+  puts "People: #{link.people}"
   puts "Posted By: #{link.posted_by.name}"
   puts "Tags:  #{link.tags * ','}"
   
