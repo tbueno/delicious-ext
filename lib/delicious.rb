@@ -17,10 +17,10 @@ module Delicious
   RECENT = 2
   SEARCH = 3
   BASE_URL = 'http://del.icio.us'
-  HOT_LIST_QUERY = "//div[@class='hotlist']/ol/li"
+ # HOT_LIST_QUERY = "//div[@class='hotlist']/ol/li"
 	
   POPULAR_URL = BASE_URL+'/popular'
-  POPULAR_QUERY = "//ul[@id='bookmarklist']/li/div"
+  HOT_LIST_QUERY,POPULAR_QUERY = "//ul[@id='bookmarklist']/li/div"
 	
   RECENT_URL = BASE_URL+'/recent'
 	
@@ -72,10 +72,8 @@ module Delicious
     def get_posted_by(result)
       name = " "
    
-      if @list_type == POPULAR or @list_type == SEARCH
+      if @list_type == POPULAR or @list_type == SEARCH 
         name = result.search("div[@class='meta']/span/a[@class='user").first['href'].gsub("/", "")	        
-      elsif @list_type == HOT_LIST
-        name = result.search("div[@class='tags']/p/a").inner_text
       elsif @list_type == RECENT
         name = result.search("div[@class='meta']/a[@class='user").first['href'].gsub("/", "")	
       end
@@ -83,28 +81,14 @@ module Delicious
     end
   
     def get_people(result)
-      query = " "
-   
-      if @list_type == HOT_LIST
-        query = result.search("div[@class='meta']/strong/span[@class='num']/span/a").inner_text
-      else
-        query = result.search("div[@class='data']/div/a/span").inner_text
-      end
-      query
+      result.search("div[@class='data']/div/a/span").inner_text
     end
     
     def get_tags(result)
       tags = []
-      if @list_type == HOT_LIST
-        query = result.search("div[@class='tags']/div/ul/li").each do |tag|
-          tags << tag.search("a").inner_text
-        end
-      else 
-        query = result.search("div[@class='tagdisplay']/ul/li/a/span").each do |span|
+      query = result.search("div[@class='tagdisplay']/ul/li/a/span").each do |span|
           tags << span.inner_text
-        end       
-      end
-      
+      end           
       tags
     end
   end
@@ -163,7 +147,7 @@ module Delicious
 end
 
 d = Delicious::Collector.new
-links = d.search('ruby')
+links = d.hot_list
 links.each do |link|
   
   puts '------------------------------------------'
