@@ -20,13 +20,12 @@ module Delicious
   HOT_LIST_QUERY = "//div[@class='hotlist']/ol/li"
 	
   POPULAR_URL = BASE_URL+'/popular'
-  POPULAR_NEW_URL = POPULAR_URL+'/?new'
   POPULAR_QUERY = "//ul[@id='bookmarklist']/li/div"
 	
   RECENT_URL = BASE_URL+'/recent'
 	
-  SEARCH_URL = BASE_URL+'/search/?fr='
-  SEARCH_QUERY = "////div[@id='main']/div/ol[@class='posts']/li"
+  SEARCH_URL = BASE_URL+'/search?context=all&p='
+  SEARCH_QUERY = "//div/[@id='bd']/div[@id='yui-main']/div[@id='content']/ul/li/div"
 	
   class Collector
     @list_type = 0
@@ -42,26 +41,21 @@ module Delicious
       get_links POPULAR_URL+'/'+tag, POPULAR_QUERY
     end
 	
-    def popular_new
-      @list_type = POPULAR
-      get_links POPULAR_NEW_URL, POPULAR_QUERY
-    end
-	
-    def recent(min=100)
+    def recent(min=2)
       @list_type = RECENT
       get_links RECENT_URL+'?min='+min.to_s, POPULAR_QUERY
     end
 	
     def search(term)
       @list_type = SEARCH
-      get_links SEARCH_URL+term+'&type=all', SEARCH_QUERY		
+      get_links SEARCH_URL+term+"&lc=1", SEARCH_QUERY		
     end
 
     private
     def get_links(base_url, query)
       links = []
      		
-      doc = Hpricot(open(base_url))      
+      doc = Hpricot(open(base_url))  
       doc.search(query).each do |result|        
         text = result.search("div[@class='data']/h4/a[@href").first.inner_text       
         url =  result.search("div[@class='data']/h4/a[@href").first['href']     
@@ -78,7 +72,7 @@ module Delicious
     def get_posted_by(result)
       name = " "
    
-      if @list_type == POPULAR
+      if @list_type == POPULAR or @list_type == SEARCH
         name = result.search("div[@class='meta']/span/a[@class='user").first['href'].gsub("/", "")	        
       elsif @list_type == HOT_LIST
         name = result.search("div[@class='tags']/p/a").inner_text
@@ -91,11 +85,10 @@ module Delicious
     def get_people(result)
       query = " "
    
-      if @list_type == POPULAR or @list_type == RECENT
-        query = result.search("div[@class='meta']/a[@class='pop']").inner_text.gsub(/[a-z]/, '').strip
-      elsif @list_type == HOT_LIST
+      if @list_type == HOT_LIST
         query = result.search("div[@class='meta']/strong/span[@class='num']/span/a").inner_text
-    
+      else
+        query = result.search("div[@class='data']/div/a/span").inner_text
       end
       query
     end
@@ -106,10 +99,10 @@ module Delicious
         query = result.search("div[@class='tags']/div/ul/li").each do |tag|
           tags << tag.search("a").inner_text
         end
-      elsif @list_type == RECENT
-        query = result.search("div[@class='meta']/a[@class= 'tag']").each do |tag|
-          tags << tag.inner_text
-        end
+      else 
+        query = result.search("div[@class='tagdisplay']/ul/li/a/span").each do |span|
+          tags << span.inner_text
+        end       
       end
       
       tags
@@ -170,17 +163,14 @@ module Delicious
 end
 
 d = Delicious::Collector.new
-links = d.popular
+links = d.search('ruby')
 links.each do |link|
-  tags = ''
-  link.tags.each do |tag|
-    tags << tag+','
-  end
   
   puts '------------------------------------------'
-  puts 'Text: '+link.text
-  puts 'URL: '+link.url
-  puts 'People: '+link.people.to_s
-  puts 'Posted By: '+link.posted_by.name
-  puts 'Tags: '+ tags
+  puts "Text: #{link.text}"
+  puts "URL: #{link.url}"
+  puts "People: #{link.people.to_s}"
+  puts "Posted By: #{link.posted_by.name}"
+  puts "Tags:  #{link.tags * ','}"
+  
 end
