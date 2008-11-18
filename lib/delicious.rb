@@ -147,7 +147,7 @@ module Delicious
 end
 
 d = Delicious::Collector.new
-links = d.hot_list
+links = d.popular
 links.each do |link|
   
   puts '------------------------------------------'

@@ -4,14 +4,18 @@ Del.icio.us Extended API
 
 USAGE:
 
-d = Delicious.new
-
-
-List the text of all new popular stories:
-d.popular_new.each{|l| p l.text}
-
-List hot list stories:
-d.hot_list.each{|l| p l.text}
+d = Delicious::Collector.new
+links = d.popular
+links.each do |link|
+  
+  puts '------------------------------------------'
+  puts "Text: #{link.text}"
+  puts "URL: #{link.url}"
+  puts "People: #{link.people.to_s}"
+  puts "Posted By: #{link.posted_by.name}"
+  puts "Tags:  #{link.tags * ','}"
+  
+end
 
 
 
