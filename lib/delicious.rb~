@@ -17,10 +17,11 @@ module Delicious
   RECENT = 2
   SEARCH = 3
   BASE_URL = 'http://del.icio.us'
- # HOT_LIST_QUERY = "//div[@class='hotlist']/ol/li"
+
 	
   POPULAR_URL = BASE_URL+'/popular'
-  HOT_LIST_QUERY = POPULAR_QUERY = "//ul[@id='bookmarklist']/li/div"
+  HOT_LIST_QUERY = "//ul[@id='bookmarklist']/li/div"
+POPULAR_QUERY = "//ul[@id='bookmarklist']/li/div"
 	
   RECENT_URL = BASE_URL+'/recent'
 	
@@ -30,22 +31,25 @@ module Delicious
   class Collector
     @list_type = 0
   
-    #Return the links from <i>'what's hot right now on del.icio.us'</i> section.
+    #Return the links from <i>'See what's hot on Deliciou'</i> section.
     def hot_list
       @list_type = HOT_LIST
       get_links BASE_URL, HOT_LIST_QUERY
     end
-	
+    #Get the popular link list. It is possible to pass a tag in order to filter
+    # links tagged in its category.	 
     def popular(tag='')
       @list_type = POPULAR
       get_links POPULAR_URL+'/'+tag, POPULAR_QUERY
     end
-	
+    
+    #Get the most recent bookmarks using a minimum size of occurences as parameter
     def recent(min=2)
       @list_type = RECENT
       get_links RECENT_URL+'?min='+min.to_s, POPULAR_QUERY
     end
-	
+    
+    #Perform a search using specific keyword
     def search(term)
       @list_type = SEARCH
       get_links SEARCH_URL+term+"&lc=1", SEARCH_QUERY		
@@ -55,15 +59,17 @@ module Delicious
     def get_links(base_url, query)
       links = []
      		
-      doc = Hpricot(open(base_url))  
+      doc = Hpricot(open(base_url))
+	puts query 
+puts POPULAR_QUERY 
       (doc/query).each do |result|        
-        text = (result/"div[@class='data']/h4/a[@href").first.inner_text       
-        url =  (result/"div[@class='data']/h4/a[@href").first['href']     
-      
-        posted_by = get_posted_by(result)	
-        people = get_people(result).to_i
-        tags = get_tags(result)
-        links << Delicious::Link.new( text, url, posted_by, people, tags)
+   #     text = (result/"div[@class='data']/h4/a[@href").first.inner_text       
+   #	 url =  (result/"div[@class='data']/h4/a[@href").first['href']     
+    puts text = (result/"div[@class='data']/h4/a[@href").first.inner_text       
+   #     posted_by = get_posted_by(result)	
+   #     people = []
+   #     tags = get_tags(result)
+   #     links << Delicious::Link.new( text, url, posted_by, people, tags)
   			
       end
       links		
@@ -80,7 +86,7 @@ module Delicious
       Delicious::Person.new(name)
     end
   
-    def get_people(result)
+    def get_people(result)      
       (result/"div[@class='data']/div/a/span").inner_text
     end
     
@@ -92,8 +98,10 @@ module Delicious
       tags
     end
   end
-  ####### Collector Class end #############
   
+  # Representation of a delicious bookmark, containing attributes like title, url
+  # number of people who saved it and tag list
+  #
   class Link
 
     attr_reader :text, :url, :posted_by, :people, :tags
@@ -106,7 +114,7 @@ module Delicious
       @tags = tags		
     end
 
-    #Comparator method. The links should be ordered by the number of people that saved them.
+    #Comparator method. The links should be ordered by the number of people that saved it.
     def <=> (link)      
       if @people > link.people
         return 1
