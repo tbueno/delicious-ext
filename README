@@ -11,11 +11,12 @@ links.each do |link|
   puts '------------------------------------------'
   puts "Text: #{link.text}"
   puts "URL: #{link.url}"
-  puts "People: #{link.people.to_s}"
+  puts "People: #{link.people}"
   puts "Posted By: #{link.posted_by.name}"
   puts "Tags:  #{link.tags * ','}"
   
 end
+
 
 
 

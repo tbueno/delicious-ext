@@ -1,4 +1,3 @@
-require 'rubygems'
 require 'hpricot'
 require 'open-uri'
 
@@ -143,19 +142,6 @@ module Delicious
     end
   end
   
-  
-end
-
-d = Delicious::Collector.new
-links = d.popular
-links.each do |link|
-  
-  puts '------------------------------------------'
-  puts "Text: #{link.text}"
-  puts "URL: #{link.url}"
-  puts "People: #{link.people}"
-  puts "Posted By: #{link.posted_by.name}"
-  puts "Tags:  #{link.tags * ','}"
   
 end
 
