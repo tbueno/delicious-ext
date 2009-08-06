@@ -16,8 +16,7 @@ module Delicious
   POPULAR = 1
   RECENT = 2
   SEARCH = 3
-  BASE_URL = 'http://del.icio.us'
- # HOT_LIST_QUERY = "//div[@class='hotlist']/ol/li"
+  BASE_URL = 'http://del.icio.us' 
 	
   POPULAR_URL = BASE_URL+'/popular'
   HOT_LIST_QUERY = POPULAR_QUERY = "//ul[@id='bookmarklist']/li/div"
@@ -58,8 +57,7 @@ module Delicious
       doc = Hpricot(open(base_url))  
       (doc/query).each do |result|        
         text = (result/"div[@class='data']/h4/a[@href").first.inner_text       
-        url =  (result/"div[@class='data']/h4/a[@href").first['href']     
-      
+        url =  (result/"div[@class='data']/h4/a[@href").first['href']
         posted_by = get_posted_by(result)	
         people = get_people(result).to_i
         tags = get_tags(result)
@@ -70,18 +68,17 @@ module Delicious
     end
 	
     def get_posted_by(result)
-      name = " "
-   
-#      if @list_type == POPULAR or @list_type == SEARCH 
-#        name = (result/"div[@class='meta']/span/a[@class='user").first['href'].gsub("/", "")	        
-#      elsif @list_type == RECENT
-#        name = (result/"div[@class='meta']/a[@class='user").first['href'].gsub("/", "")	
-#      end
+      name = " "   
+      if @list_type == POPULAR or @list_type == SEARCH        
+       name = (result/"div[@class='meta']/a/span").first.inner_text.split.last         
+      elsif @list_type == RECENT
+        name = (result/"div[@class='meta']/a[@class='user").first['href'].gsub("/", "")	
+      end
       Delicious::Person.new(name)
     end
   
     def get_people(result)
-      (result/"div[@class='data']/div/a/span").inner_text
+      (result/"div[@class='data']/div/div/a/span").inner_text
     end
     
     def get_tags(result)
@@ -155,7 +152,7 @@ links.each do |link|
   puts "Text: #{link.text}"
   puts "URL: #{link.url}"
   puts "People: #{link.people}"
-#  puts "Posted By: #{link.posted_by.name}"
+  puts "Posted By: #{link.posted_by.name}"
   puts "Tags:  #{link.tags * ','}"
   
 end

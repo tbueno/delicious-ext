@@ -1,5 +1,7 @@
 Del.icio.us Extended API
 
+ATTENTION
+In the beginning of August '09, Delicious Website has changed. So, I had to change some features like "Posted By" method for the links in the front page.
 
 
 USAGE:
@@ -11,8 +13,7 @@ links.each do |link|
   puts '------------------------------------------'
   puts "Text: #{link.text}"
   puts "URL: #{link.url}"
-  puts "People: #{link.people}"
-  puts "Posted By: #{link.posted_by.name}"
+  puts "People: #{link.people}"  
   puts "Tags:  #{link.tags * ','}"
   
 end
