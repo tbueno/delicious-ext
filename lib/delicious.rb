@@ -12,27 +12,32 @@ require 'open-uri'
 module Delicious
   
   #Possible types of lists
-  HOT_LIST = 0
+  FRESH = 0
   POPULAR = 1
   RECENT = 2
   SEARCH = 3
   BASE_URL = 'http://del.icio.us' 
 	
   POPULAR_URL = BASE_URL+'/popular'
-  HOT_LIST_QUERY = POPULAR_QUERY = "//ul[@id='bookmarklist']/li/div"
-	
+  HOT_LIST_URL = BASE_URL+'/?view=hotlist'
   RECENT_URL = BASE_URL+'/recent'
-	
   SEARCH_URL = BASE_URL+'/search?context=all&p='
+  
+  FRESH_QUERY = POPULAR_QUERY = "//ul[@id='bookmarklist']/li/div"	
   SEARCH_QUERY = "//div/[@id='bd']/div[@id='yui-main']/div[@id='content']/ul/li/div"
 	
   class Collector
     @list_type = 0
   
-    #Return the links from <i>'what's hot right now on del.icio.us'</i> section.
+   
+    def fresh
+      @list_type = FRESH
+      get_links BASE_URL, FRESH_QUERY
+    end
+    
     def hot_list
-      @list_type = HOT_LIST
-      get_links BASE_URL, HOT_LIST_QUERY
+      @list_type = FRESH
+      get_links HOT_LIST_URL, FRESH_QUERY
     end
 	
     def popular(tag='')
@@ -144,16 +149,4 @@ module Delicious
 end
 
 
-d = Delicious::Collector.new
-links = d.popular
-links.each do |link|
-  
-  puts '------------------------------------------'
-  puts "Text: #{link.text}"
-  puts "URL: #{link.url}"
-  puts "People: #{link.people}"
-  puts "Posted By: #{link.posted_by.name}"
-  puts "Tags:  #{link.tags * ','}"
-  
-end
 

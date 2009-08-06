@@ -6,18 +6,33 @@ In the beginning of August '09, Delicious Website has changed. So, I had to chan
 
 USAGE:
 
+
 d = Delicious::Collector.new
-links = d.popular
+links = d.popular 'ruby'
 links.each do |link|
   
   puts '------------------------------------------'
   puts "Text: #{link.text}"
   puts "URL: #{link.url}"
-  puts "People: #{link.people}"  
+  puts "People: #{link.people}"
+  puts "Posted By: #{link.posted_by.name}" if link.posted_by.name
   puts "Tags:  #{link.tags * ','}"
   
 end
 
+
+KINDS OF LISTS
+
+Popular: 
+  Popular links found at delicious.com/popular
+  This links can also be searched by tags
+  
+Recent:
+  Links newly added to delicious.
+
+Fresh: " The freshest bookmarks that are flying like hotcakes on Delicious and beyond."
+
+Hot List: Popular links right now.
 
 
 
