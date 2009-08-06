@@ -1,12 +1,13 @@
+require 'rubygems'
 require 'hpricot'
 require 'open-uri'
 
 
 # This Module is an extension to official del.icio.us API.
 # The main purpose here is to provide methods like 
-# get popular, hot and recent links. 
+# get popular, hot and recent links using scraping. 
 #
-# Author::    Thiago Bueno Silva  (mailto:tbueno@gmail.com)
+# Author::    Thiago Bueno Silva  (mailto:tbueno@tbueno.com)
 # License::   Distributes under the same terms as Ruby
 module Delicious
   
@@ -71,11 +72,11 @@ module Delicious
     def get_posted_by(result)
       name = " "
    
-      if @list_type == POPULAR or @list_type == SEARCH 
-        name = (result/"div[@class='meta']/span/a[@class='user").first['href'].gsub("/", "")	        
-      elsif @list_type == RECENT
-        name = (result/"div[@class='meta']/a[@class='user").first['href'].gsub("/", "")	
-      end
+#      if @list_type == POPULAR or @list_type == SEARCH 
+#        name = (result/"div[@class='meta']/span/a[@class='user").first['href'].gsub("/", "")	        
+#      elsif @list_type == RECENT
+#        name = (result/"div[@class='meta']/a[@class='user").first['href'].gsub("/", "")	
+#      end
       Delicious::Person.new(name)
     end
   
@@ -142,6 +143,20 @@ module Delicious
     end
   end
   
+  
+end
+
+
+d = Delicious::Collector.new
+links = d.popular
+links.each do |link|
+  
+  puts '------------------------------------------'
+  puts "Text: #{link.text}"
+  puts "URL: #{link.url}"
+  puts "People: #{link.people}"
+#  puts "Posted By: #{link.posted_by.name}"
+  puts "Tags:  #{link.tags * ','}"
   
 end
 
