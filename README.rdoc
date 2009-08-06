@@ -1,4 +1,12 @@
-Del.icio.us Extended API
+= Del.icio.us Extended API
+
+This Module is an extension to official del.icio.us API. The main purpose here is to provide methods like get popular, fresh, hot and recent links using scraping. 
+
+=== Author:
+ Thiago Bueno Silva  (mailto:tbueno@tbueno.com)
+
+=== License:
+ Distributes under the same terms as Ruby
 
 ATTENTION
 In the beginning of August '09, Delicious Website has changed. So, I had to change some features like "Posted By" method for the links in the front page.
