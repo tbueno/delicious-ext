@@ -60,6 +60,12 @@ Links newly added to delicious.
 Popular links right now.
 
   hot_links = d.hot_list
+  
+=== Search
+
+Search links based on a term.
+
+  links = d.search 'rails' 
 
 
 
