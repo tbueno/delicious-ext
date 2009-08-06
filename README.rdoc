@@ -8,11 +8,8 @@ Thiago Bueno Silva  (mailto:tbueno@tbueno.com)
 === License:
 Distributes under the same terms as Ruby
 
-ATTENTION
-In the beginning of August '09, Delicious Website has changed. So, I had to change some features like "Posted By" method for the links in the front page.
 
-
-USAGE:
+== USAGE:
 
 
   d = Delicious::Collector.new
@@ -27,18 +24,42 @@ USAGE:
   end
 
 
-KINDS OF LISTS
+== METHODS
 
-Popular: 
-  Popular links found at delicious.com/popular
-  This links can also be searched by tags
+=== Popular 
+
+Get popular links found at "delicious.com/popular".
+
+  links = d.popular
+  links.each do |link|  
+    puts '------------------------------------------'
+    puts "Text: #{link.text}"
+    puts "URL: #{link.url}"
+    puts "People: #{link.people}"
+    puts "Posted By: #{link.posted_by.name}" if link.posted_by.name
+    puts "Tags:  #{link.tags * ','}"
+  end
   
-Recent:
-  Links newly added to delicious.
+  # This links can also be searched by tags
+  
+  d.popular 'ruby'
+  
+=== Recent
 
-Fresh: " The freshest bookmarks that are flying like hotcakes on Delicious and beyond."
+Links newly added to delicious.
+  recent_links = d.recent
 
-Hot List: Popular links right now.
+=== Fresh
+
+"The freshest bookmarks that are flying like hotcakes on Delicious and beyond."
+
+  fresh_links = d.fresh
+
+=== Hot List
+
+Popular links right now.
+
+  hot_links = d.hot_list
 
 
 
