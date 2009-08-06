@@ -3,10 +3,10 @@
 This Module is an extension to official del.icio.us API. The main purpose here is to provide methods like get popular, fresh, hot and recent links using scraping. 
 
 === Author:
- Thiago Bueno Silva  (mailto:tbueno@tbueno.com)
+Thiago Bueno Silva  (mailto:tbueno@tbueno.com)
 
 === License:
- Distributes under the same terms as Ruby
+Distributes under the same terms as Ruby
 
 ATTENTION
 In the beginning of August '09, Delicious Website has changed. So, I had to change some features like "Posted By" method for the links in the front page.
@@ -15,18 +15,16 @@ In the beginning of August '09, Delicious Website has changed. So, I had to chan
 USAGE:
 
 
-d = Delicious::Collector.new
-links = d.popular 'ruby'
-links.each do |link|
-  
-  puts '------------------------------------------'
-  puts "Text: #{link.text}"
-  puts "URL: #{link.url}"
-  puts "People: #{link.people}"
-  puts "Posted By: #{link.posted_by.name}" if link.posted_by.name
-  puts "Tags:  #{link.tags * ','}"
-  
-end
+  d = Delicious::Collector.new
+  links = d.popular 'ruby'
+  links.each do |link|  
+    puts '------------------------------------------'
+    puts "Text: #{link.text}"
+    puts "URL: #{link.url}"
+    puts "People: #{link.people}"
+    puts "Posted By: #{link.posted_by.name}" if link.posted_by.name
+    puts "Tags:  #{link.tags * ','}"
+  end
 
 
 KINDS OF LISTS

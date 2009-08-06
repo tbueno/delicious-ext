@@ -6,7 +6,7 @@ require 'open-uri'
 # This Module is an extension to official del.icio.us API.
 # The main purpose here is to provide methods like 
 # get popular, hot and recent links using scraping. 
-#
+
 # Author::    Thiago Bueno Silva  (mailto:tbueno@tbueno.com)
 # License::   Distributes under the same terms as Ruby
 module Delicious
