@@ -12,14 +12,10 @@ Gem::Specification.new do |s|
   s.date = %q{2009-02-01}
   s.description = %q{An Extension to Del.icio.us API using Ruby.}
   s.email = %q{tbueno@tbueno.com}
-  s.extra_rdoc_files = [
-    "LICENSE",
-     "README.md"
-  ]
+  
   s.files = [
      "README.rdoc",
-     "VERSION.yml",
-     "lib/delicious.rb",
+     "lib/delicious.rb"
   ]
   s.homepage = %q{http://github.com/tbueno/delicious-ext}
   s.rdoc_options = ["--charset=UTF-8"]
@@ -29,7 +25,7 @@ Gem::Specification.new do |s|
   s.summary = %q{An Extension to Del.icio.us API using Ruby.}
   s.test_files = [
     "test/delicious_test.rb",
-     "link_test.rb",
+     "test/link_test.rb"
   ]
 
   if s.respond_to? :specification_version then
